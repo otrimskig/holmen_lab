@@ -11,7 +11,6 @@ knitr::opts_chunk$set(message=FALSE,results='hide',fig.keep='all')
 ```{r}
 ##############plotting survival curve with full cohort data. 
 library(tidyverse)
-library(tinytex)
 
 #1st thing, creating a clean dataset that can be easily used for plotting. 
 #pull data from compiled_cohorts.csv, which has 
