@@ -164,10 +164,11 @@ survfit(Surv(time = age_death_capped)~genes_ko, data = read_csv("survival_compil
   
   ggsurvplot(xlim = c(0, 150),
              ylim = c(0, 1.02),
-             size =2,
-             alpha = .7,
+             size =3,
+             alpha = .9,
              break.x.by = 25,
              break.y.by = .25,
+    
              axes.offset = FALSE,
              legend = "right",
              ggtheme = theme_classic(),
@@ -211,7 +212,7 @@ survfit(Surv(time = elapsed_from_tumor)~genes_ko,
              axes.offset = FALSE,
              legend = "right",
              ggtheme = theme_classic(),
-             scale_color_manual =(values(colors_hex)),
+             scale_color_manual(values = color_hex),
              xlab = "Time Post Injection (Days)",
              legend.title = "Genes KO",
              #legend.lab = leg_order
@@ -357,3 +358,31 @@ color_genes<-
 
 names(color_hex) = color_genes
 color_hex
+
+
+
+
+
+##################################################
+
+#genes_ko'd groups
+
+read_csv("compiled_cohorts3.csv")%>%
+  group_by(genes_ko)%>%
+  slice(1)%>%
+  select(genes_ko, nf1_ko, pten_ko, ink_ko, atrx_ko)
+  
+
+
+read_csv("kos.csv")%>%
+  drop_na()%>%
+  row_to_names(1)%>%clean_names()%>%
+  bind_cols(read_csv("compiled_cohorts3.csv")%>%
+              group_by(genes_ko)%>%
+              slice(1)%>%
+              select(genes_ko, nf1_ko, pten_ko, ink_ko, atrx_ko))%>%
+  select(1:5)%>%
+  relocate(genes_ko)%>%
+  mutate_at(vars(c(2,3,4,5)), .funs= c(as.logical, as.integer))
+
+            
