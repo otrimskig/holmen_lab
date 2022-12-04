@@ -1,44 +1,86 @@
+pathPrep <- function(path = "clipboard") {
+  y <- if (path == "clipboard") {
+    readClipboard()
+  } else {
+    cat("Please enter the path:\n\n")
+    readline()
+  }
+  x <- chartr("\\", "/", y)
+  writeClipboard(x)
+  return(x)
+}
+
+
+
 
 ###########################################2###
-
 #main
 
-home<-"X:/Holmen Lab/Lab Personnel/Garrett/R/"
-setwd(home)
-
-
-
 library(tidyverse)
-library(ggplot2)
 library(janitor)
+library(stringr)
+
 library(fuzzyjoin)
+
 library(tools)
 library(readr)
 library(fs)
-library(stringr)
+
 library(googlesheets4)
+
+library(readxl)
+library(rio)
 
 ##############################################
 
 
 ##colors and other packages for plots
-
+library(ggsci)
 
 library(viridis)
-library(ggsci)
-library(RColorBrewer)
-library(survival)
 
+library(RColorBrewer)
+
+library(survival)
 
 
 #############################################
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+home<-"X:/Holmen Lab/Lab Personnel/Garrett/R/"
+setwd(home)
+###########################################
+
 install.packages("clipr")
 install.packages("googlesheets4")
-
-
-
 
 install.packages("tidyverse")
 library(tidyverse)
@@ -64,42 +106,14 @@ library(ggsci)
 install.packages("fuzzyjoin")
 library(fuzzyjoin)
 
-library(tools)
-library(readr)
-
 install.packages("fs")
 library(fs)
 
+install.packages("rio")
 
+install.packages("installr")
 
+library(installr)
 
-
-
-
-coalesce_join <- function(x, y, 
-                          by = NULL, suffix = c(".x", ".y"), 
-                          join = dplyr::full_join, ...) {
-  joined <- join(x, y, by = by, suffix = suffix, ...)
-  # names of desired output
-  cols <- union(names(x), names(y))
-  
-  to_coalesce <- names(joined)[!names(joined) %in% cols]
-  suffix_used <- suffix[ifelse(endsWith(to_coalesce, suffix[1]), 1, 2)]
-  # remove suffixes and deduplicate
-  to_coalesce <- unique(substr(
-    to_coalesce, 
-    1, 
-    nchar(to_coalesce) - nchar(suffix_used)
-  ))
-  
-  coalesced <- purrr::map_dfc(to_coalesce, ~dplyr::coalesce(
-    joined[[paste0(.x, suffix[1])]], 
-    joined[[paste0(.x, suffix[2])]]
-  ))
-  names(coalesced) <- to_coalesce
-  
-  dplyr::bind_cols(joined, coalesced)[cols]
-}
-
-
+updateR()
 
