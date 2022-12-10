@@ -1613,8 +1613,10 @@ number.</p>
   row_to_names(1)%&gt;%clean_names()</code></pre>
 <p>1 way to get dates from dates.</p>
 <pre class="r"><code>mutate(col = as.Date(col, format = &quot;%m/%d/%Y&quot;))</code></pre>
-<p>in new column, delete everything before the space.</p>
-<pre class="r"><code>  mutate(injection_date = gsub(&quot; .*&quot;, &quot;&quot;, injection_date))</code></pre>
+<p>in new column, delete everything before the space. Or delete special
+characters. Use 2 backslashes.</p>
+<pre class="r"><code>  mutate(injection_date = gsub(&quot; .*&quot;, &quot;&quot;, injection_date))
+mutate(necropsy_file_path = gsub(&quot;\\~\\$&quot;, &quot;&quot;, necropsy_file_path))</code></pre>
 <p>mutate if data in x column if y column contains a string/pattern.</p>
 <p>use grepl here to turn the search into a logical vector of same
 length as search area, so that if_else can work.</p>
@@ -1630,6 +1632,8 @@ also use helper functions to select columns.</p>
 <p>here mdy is the function, uses vars to select the variables, in this
 case by column index.</p>
 <pre class="r"><code>mutate_at(vars(13:17,23), mdy)</code></pre>
+<p>extract filename from path using gsub function.</p>
+<pre class="r"><code>mutate(nec_filename = gsub(&quot;.*\\/&quot;, &quot;&quot;, necropsy_file_path))</code></pre>
 </div>
 <div id="plotting" class="section level1">
 <h1>plotting</h1>
@@ -1656,14 +1660,32 @@ file.copy(from=old, to=new,
           overwrite = TRUE, 
           recursive = TRUE, 
           copy.mode = TRUE)</code></pre>
-<p>list files</p>
+<p>list files #if using a subdir of wd, must use “.”</p>
 <pre class="r"><code>list.files(path = &quot;directory&quot;, 
            full.names = TRUE, 
            recursive = TRUE, 
            ignore.case = TRUE)%&gt;%
-  as_tibble()</code></pre>
+  as_tibble()
+
+
+
+list.files(&quot;./necropsy/&quot;,pattern = &quot;*.csv&quot;) 
+
+
+#use &quot;../&quot; to go up one from current wd. 
+list.files(&quot;../slides/file.csv&quot;) </code></pre>
 <p>rename files</p>
 <pre class="r"><code>file.rename(filenames$new, filenames$old)</code></pre>
+<pre class="r"><code> #code to turn name of file into working hyperlink (in excel)
+   mutate(link = paste0(&quot;=HYPERLINK(&quot;, &quot;\&quot;&quot;, 
+                      #full path to file
+                       path,
+                      #add  [&quot;,&quot;]
+                      &quot;\&quot;,\&quot;&quot;, 
+                      #name of link
+                       filename,
+                      #add [&quot;)]
+                      &quot;\&quot;)&quot;))</code></pre>
 </div>
 </div>
 

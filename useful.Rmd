@@ -149,6 +149,10 @@ list.files(path = "directory",
 
 list.files("./necropsy/",pattern = "*.csv") 
 
+
+#use "../" to go up one from current wd. 
+list.files("../slides/file.csv") 
+
 ```
 
 rename files
@@ -156,3 +160,18 @@ rename files
 ```{r}
 file.rename(filenames$new, filenames$old)
 ```
+
+
+```{r}
+ #code to turn name of file into working hyperlink (in excel)
+   mutate(link = paste0("=HYPERLINK(", "\"", 
+                      #full path to file
+                       path,
+                      #add  [","]
+                      "\",\"", 
+                      #name of link
+                       filename,
+                      #add [")]
+                      "\")"))
+```
+
